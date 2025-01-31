@@ -1,14 +1,20 @@
 # Review of SELinux Policy Analysis Tools
 
+## ArXiv Paper
+
+[https://docs.google.com/document/d/1YNgahoAx1_5Y1oSeLdPQWBxaEpGiWMo4RWQqTIWmU10/edit?usp=sharing
+](https://arxiv.org/abs/2501.00085#:~:text=Security%2DEnhanced%20Linux%20(SELinux),for%20policy%20analysis%20and%20management.)
 
 ## Paper draft
 
-https://docs.google.com/document/d/1YNgahoAx1_5Y1oSeLdPQWBxaEpGiWMo4RWQqTIWmU10/edit?usp=sharing
-
+[https://docs.google.com/document/d/1YNgahoAx1_5Y1oSeLdPQWBxaEpGiWMo4RWQqTIWmU10/edit?usp=sharing
+](https://docs.google.com/document/d/1YNgahoAx1_5Y1oSeLdPQWBxaEpGiWMo4RWQqTIWmU10/edit?usp=sharing
+)
 ## Pre-print paper draft
 
-https://docs.google.com/document/d/18I_WBMMVbM0GW3xVTLEGNo8ZY_9PBavW_4c_L25LgjU/edit?usp=sharing
-
+[https://docs.google.com/document/d/18I_WBMMVbM0GW3xVTLEGNo8ZY_9PBavW_4c_L25LgjU/edit?usp=sharing
+](https://docs.google.com/document/d/18I_WBMMVbM0GW3xVTLEGNo8ZY_9PBavW_4c_L25LgjU/edit?usp=sharing
+)
 ## Contributors
 
 | Contributor | Affiliation                                                                                         | Google Scholar                                                          |

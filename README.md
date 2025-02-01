@@ -3,14 +3,17 @@
 ## Papers
 - [ArXiv
 ](https://arxiv.org/abs/2501.00085#:~:text=Security%2DEnhanced%20Linux%20(SELinux),for%20policy%20analysis%20and%20management.)
+
+## Accepted Into
+- [ICIR '24](https://icir.ieee.org/)
+- [Elsevier](https://www.elsevier.com/)
+
+## Prior Work
 - [Paper Draft
 ](https://docs.google.com/document/d/1YNgahoAx1_5Y1oSeLdPQWBxaEpGiWMo4RWQqTIWmU10/edit?usp=sharing
 )
 - [Pre-print Paper Draft](https://docs.google.com/document/d/18I_WBMMVbM0GW3xVTLEGNo8ZY_9PBavW_4c_L25LgjU/edit?usp=sharing
 )
-## Accepted Into
-- [ICIR '24](https://icir.ieee.org/)
-- [Elsevier](https://www.elsevier.com/)
 
 ## Contributors
 

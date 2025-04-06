@@ -50,7 +50,7 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=60s --retries=3 \
 FROM alpine:latest
 
 # Install necessary packages
-RUN apk add --no-cache nodejs npm wget bash openjdk11-jre
+RUN apk add --no-cache nodejs npm wget bash openjdk11-jre curl
 
 # Set environment variables for Next.js
 ENV HOST=0.0.0.0
@@ -87,17 +87,36 @@ EXPOSE 10000 7474 7473 7687
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
-# Start Neo4j in the background\n\
-neo4j start &\n\
 \n\
-# Wait for Neo4j to be ready\n\
-echo "Waiting for Neo4j to start..."\n\
-while ! wget -q --spider http://localhost:7474; do\n\
-  sleep 1\n\
+# Function to log messages with timestamps\n\
+log() {\n\
+    echo "[$(date "+%Y-%m-%d %H:%M:%S")] $1"\n\
+}\n\
+\n\
+# Start Neo4j\n\
+log "Starting Neo4j..."\n\
+neo4j start\n\
+\n\
+# Wait for Neo4j to be ready (with timeout)\n\
+log "Waiting for Neo4j to start (timeout: 120s)..."\n\
+TIMEOUT=120\n\
+COUNTER=0\n\
+while ! curl -s http://localhost:7474 > /dev/null; do\n\
+    if [ $COUNTER -gt $TIMEOUT ]; then\n\
+        log "ERROR: Neo4j failed to start within $TIMEOUT seconds"\n\
+        # Start Next.js anyway\n\
+        break\n\
+    fi\n\
+    let COUNTER=COUNTER+1\n\
+    sleep 1\n\
 done\n\
-echo "Neo4j is ready!"\n\
+\n\
+if [ $COUNTER -le $TIMEOUT ]; then\n\
+    log "Neo4j is ready!"\n\
+fi\n\
 \n\
 # Start Next.js\n\
+log "Starting Next.js..."\n\
 cd /app/nextjs && npm start\n\
 ' > /start.sh && chmod +x /start.sh
 

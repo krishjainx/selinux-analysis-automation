@@ -34,6 +34,10 @@ ENV NEO4J_AUTH=neo4j/selinux123
 ENV NEO4J_dbms_memory_pagecache_size=1G
 ENV NEO4J_dbms_memory_heap_initial__size=1G
 ENV NEO4J_dbms_memory_heap_max__size=1G
+# Configure Neo4j to listen on all interfaces
+ENV NEO4J_server_default__listen__address=0.0.0.0
+ENV NEO4J_server_bolt_advertised__address=0.0.0.0:7687
+ENV NEO4J_server_http_advertised__address=0.0.0.0:7474
 
 # expose ports
 EXPOSE 7474 7473 7687
@@ -46,7 +50,11 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=60s --retries=3 \
 FROM alpine:latest
 
 # Install necessary packages
-RUN apk add --no-cache nodejs npm wget bash
+RUN apk add --no-cache nodejs npm wget bash openjdk11-jre
+
+# Set environment variables for Next.js
+ENV HOST=0.0.0.0
+ENV PORT=10000
 
 # Copy Next.js app
 COPY --from=nextjs /app /app/nextjs
@@ -60,23 +68,36 @@ COPY --from=neo4j /var/lib/neo4j/data /data
 COPY --from=neo4j /var/lib/neo4j/logs /logs
 COPY --from=neo4j /var/lib/neo4j/plugins /plugins
 
-# Set up environment variables
+# Set up environment variables for Neo4j
 ENV NEO4J_AUTH=neo4j/selinux123
 ENV NEO4J_dbms_memory_pagecache_size=1G
 ENV NEO4J_dbms_memory_heap_initial__size=1G
 ENV NEO4J_dbms_memory_heap_max__size=1G
 ENV NEO4J_HOME=/var/lib/neo4j
 ENV PATH=$NEO4J_HOME/bin:$PATH
+ENV NEO4J_server_default__listen__address=0.0.0.0
+ENV NEO4J_server_bolt_advertised__address=0.0.0.0:7687
+ENV NEO4J_server_http_advertised__address=0.0.0.0:7474
 
 # Create necessary directories
 RUN mkdir -p /data /logs /plugins
 
 # Expose ports for both services
-EXPOSE 3000 7474 7473 7687
+EXPOSE 10000 7474 7473 7687
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
+# Start Neo4j in the background\n\
 neo4j start &\n\
+\n\
+# Wait for Neo4j to be ready\n\
+echo "Waiting for Neo4j to start..."\n\
+while ! wget -q --spider http://localhost:7474; do\n\
+  sleep 1\n\
+done\n\
+echo "Neo4j is ready!"\n\
+\n\
+# Start Next.js\n\
 cd /app/nextjs && npm start\n\
 ' > /start.sh && chmod +x /start.sh
 

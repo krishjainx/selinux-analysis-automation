@@ -46,7 +46,7 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=60s --retries=3 \
 FROM alpine:latest
 
 # Install necessary packages
-RUN apk add --no-cache nodejs npm wget
+RUN apk add --no-cache nodejs npm wget bash
 
 # Copy Next.js app
 COPY --from=nextjs /app /app/nextjs
@@ -75,10 +75,10 @@ RUN mkdir -p /data /logs /plugins
 EXPOSE 3000 7474 7473 7687
 
 # Create startup script
-RUN echo '#!/bin/sh\n\
+RUN echo '#!/bin/bash\n\
 neo4j start &\n\
 cd /app/nextjs && npm start\n\
 ' > /start.sh && chmod +x /start.sh
 
 # Start both services
-CMD ["/start.sh"] 
+CMD ["/bin/bash", "/start.sh"] 
